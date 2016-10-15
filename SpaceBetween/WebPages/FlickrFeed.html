@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Stylesheets -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <!--<link href="/css/default.less" rel="stylesheet" />-->
+    <link href="/css/site.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <title>Flickr Public Feed</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <h1>Flickr Public Feed</h1>
+        </div>
+
+        <ul id="placeholder"></ul>
+
+    </div>
+
+    <script id="flickrTemplate" type="text/x-jquery-tmpl">
+
+        <div class="flickrTable">
+            <div class="field">
+                <div class="cell flickrImage">
+                    <a href="${link}"><img src="${media.m}" alt="${title}" /></a>
+                </div>
+                <div class="cell flickrTitle">
+                    <div class="field">
+                        <a href="${link}"><h3>${title}</h3></a>
+                    </div>
+                    <div class="field flickrLink flickrPublishedDateMobile">
+                        <p> Published ${published.toString().split('T')[0]} at ${published.toString('dd MMM yyyy').split('T')[1].split('Z')[0]}</p>
+                    </div>
+                    <div class="field">
+                        <div class="flickrLink">
+                            <a class="underlinedLink" href="https://www.flickr.com/photos/${author_id}">Post author</a>
+                        </div>
+                        <div class="flickrLink flickrPublishedDate">
+                            <p> Published ${published.toString().split('T')[0]} at ${published.toString('dd MMM yyyy').split('T')[1].split('Z')[0]}</p>
+                        </div>
+                        <div class="flickrLink">
+                            <a class="underlinedLink" href="${link}">View on Flickr</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://api.flickr.com/services/feeds/photos_public.gne",
+                data: "format=json",
+                jsonp: "jsoncallback",
+                dataType: "jsonp",
+                success: function (data) {
+                    $("#flickrTemplate").tmpl(data.items).appendTo("#placeholder");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
